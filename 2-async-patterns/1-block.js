@@ -9,21 +9,24 @@
 // }, 2000);
 
 // console.log("I will log first");
-
 const http = require("http");
-const fs = require("fs");
 
 const server = http.createServer((req, res) => {
-  // const text = fs.readFileSync("./content/big.txt", "utf8");
-  // res.end(text);
-
-  const fileStream = fs.createReadStream("./content/big.txt", "utf8");
-  fileStream.on("open", () => {
-    fileStream.pipe(res);
-  });
-  fileStream.on("error", (err) => {
-    console.log("error", err);
-  });
+  if (req.url === "/") {
+    res.end("Home Page");
+  }
+  if (req.url === "/about") {
+    // Blocking code
+    for (let i = 0; i < 1000; i++) {
+      for (let j = 0; j < 1000; j++) {
+        console.log(`${i}${j}`);
+      }
+    }
+    res.end("About Page");
+  }
+  res.end("Error Page");
 });
 
-server.listen(5000);
+server.listen(5000, () => {
+  console.log("server is listening at port :5000");
+});
